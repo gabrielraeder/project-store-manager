@@ -16,11 +16,11 @@ const insert = async (array) => {
   const validation = quantities.map((q) => validations.validateSalesQuantity(q));
   const error = validation.find((i) => i.type === 'INVALID_VALUE');
   if (error) return error;
-  const idNotFound = checkIds(array);
+  const idNotFound = await checkIds(array);
   if (idNotFound) return idNotFound; 
-  await Promise.all(array.map(
-    async (sale) => salesModel.insert(sale, saleId),
-  ));
+  const res = array.map((sale) => salesModel.insert(sale, saleId));
+  await Promise.all(res);
+
   const result = {
     id: saleId,
     itemsSold: array,

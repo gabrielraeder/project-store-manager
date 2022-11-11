@@ -54,7 +54,6 @@ describe('Testa camada SERVICE de rotas products', function () {
 
       sinon.stub(productModel, 'insert').resolves(product.id);
       sinon.stub(productModel, 'findById').resolves(product);
-      sinon.stub(validations, 'validateInsertData').resolves();
 
       const result = await productService.insert(data);
       expect(result).to.deep.equal({ type: null, message: product });
