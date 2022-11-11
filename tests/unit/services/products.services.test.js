@@ -3,7 +3,6 @@ const sinon = require('sinon');
 
 const productModel = require('../../../src/models/products.model');
 const productService = require('../../../src/services/products.service');
-const validations = require('../../../src/services/validations/inputValidations');
 
 const productMocks = require('./mocks/products.mock');
 
