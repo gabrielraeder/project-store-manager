@@ -20,8 +20,17 @@ const successFindById = {
   
 const failureFindById = { type: 'PRODUCT_NOT_FOUND', message: 'Product not found' };
 
+const createdProduct = {
+    "id": 5,
+    "name": "projetoX"
+}
+
+const creationFailure = { type: 'INVALID_VALUE', message: '"name" length must be at least 5 characters long' };
+
 module.exports = {
   findAllProducts,
   successFindById,
-  failureFindById
+  failureFindById,
+  createdProduct,
+  creationFailure,
 }

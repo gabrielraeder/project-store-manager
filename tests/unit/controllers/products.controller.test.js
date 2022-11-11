@@ -66,4 +66,44 @@ describe('Testa camada CONTROLLER de rotas products', function () {
       expect(res.json).to.have.been.calledWith({ message: 'Product not found' });
     });
   });
+  describe('Rota POST', function () {
+    beforeEach(sinon.restore);
+    it('Testa adicionar novo produto com sucesso', async function () {
+      const res = {};
+      const req = {
+        body: {
+          name: 'projetoX',
+        }
+      };
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      sinon.stub(productService, 'insert').resolves({ type: null, message: productsMock.createdProduct });
+
+      await productController.createProduct(req, res);
+
+      expect(res.status).to.have.been.calledWith(201);
+
+      expect(res.json).to.have.been.calledWith(productsMock.createdProduct);
+    });
+
+    it('Erro ao adicionar novo produto', async function () {
+      const res = {};
+      const req = {
+        body: {
+          name: 'p',
+        }
+      };
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      sinon.stub(productService, 'insert').resolves(productsMock.creationFailure);
+
+      await productController.createProduct(req, res);
+
+      expect(res.status).to.have.been.calledWith(422);
+
+      expect(res.json).to.have.been.calledWith({ message: '"name" length must be at least 5 characters long' });
+    });
+  })
 });

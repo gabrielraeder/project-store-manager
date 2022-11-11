@@ -33,4 +33,14 @@ describe('Testa camada Model de rotas products', function () {
       expect(result).to.be.deep.equal(productMocks.failureFindById);
     });
   });
+
+  describe('Rota POST', function () {
+    beforeEach(sinon.restore);
+    it('Testa adicionar novo produto com sucesso', async function () {
+      sinon.stub(connection, 'execute').resolves([{ insertId: 5 }]);
+
+      const result = await productModel.insert({ name: 'produtoX' });
+      expect(result).to.equal(5);
+    });
+  })
 });
