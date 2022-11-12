@@ -38,10 +38,20 @@ const remove = async (id) => {
   return { type: null, message: { id } };
 };
 
+const querySearch = async (query) => {
+  if (!query) {
+    const products = await findAll();
+    return products;
+  }
+  const result = await productModel.querySearch(query);
+  return { type: null, message: result };
+};
+
 module.exports = {
   findAll,
   findById,
   insert,
   update,
   remove,
+  querySearch,
 };
