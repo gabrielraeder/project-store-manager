@@ -105,5 +105,76 @@ describe('CONTROLLER - PRODUCTS', function () {
 
       expect(res.json).to.have.been.calledWith({ message: '"name" length must be at least 5 characters long' });
     });
-  })
+  });
+
+  describe('Rota PUT', function () {
+    beforeEach(sinon.restore);
+    it('Testa atualizar um produto com sucesso', async function () {
+      const res = {};
+      const req = {
+        body: {
+          name: 'batman',
+        },
+        params: {
+          id: 1,
+        }
+      };
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      sinon.stub(productService, 'update').resolves({ type: null, message: productsMock.updatedProduct });
+
+      await productController.update(req, res);
+
+      expect(res.status).to.have.been.calledWith(200);
+
+      expect(res.json).to.have.been.calledWith(productsMock.updatedProduct);
+    });
+
+    it('Testa atualizar um produto com erro no ID', async function () {
+      const res = {};
+      const req = {
+        body: {
+          name: 'batman',
+        },
+        params: {
+          id: 555,
+        }
+      };
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      sinon.stub(productService, 'update').resolves({ type: 'PRODUCT_NOT_FOUND', message: 'Product not found' });
+
+      await productController.update(req, res);
+
+      expect(res.status).to.have.been.calledWith(404);
+
+      expect(res.json).to.have.been.calledWith({ message: 'Product not found' });
+    });
+
+    it('Testa atualizar um produto com erro no ID', async function () {
+      const res = {};
+      const req = {
+        body: {
+          name: 'bat',
+        },
+        params: {
+          id: 1,
+        }
+      };
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      sinon.stub(productService, 'update').resolves(
+        { type: 'INVALID_VALUE', message: '"name" length must be at least 5 characters long' }
+      );
+
+      await productController.update(req, res);
+
+      expect(res.status).to.have.been.calledWith(422);
+
+      expect(res.json).to.have.been.calledWith({ message: '"name" length must be at least 5 characters long' });
+    });
+  });
 });

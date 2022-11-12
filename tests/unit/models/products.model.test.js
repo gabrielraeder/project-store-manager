@@ -42,5 +42,15 @@ describe('MODEL - PRODUCTS', function () {
       const result = await productModel.insert({ name: 'produtoX' });
       expect(result).to.equal(5);
     });
-  })
+  });
+
+  describe('Rota PUT', function () {
+    beforeEach(sinon.restore);
+    it('Testa atualizar um produto com sucesso', async function () {
+      sinon.stub(connection, 'execute').resolves([{ affectedRows: 1 }]);
+
+      const result = await productModel.update(1, 'Martelo do Batman');
+      expect(result.affectedRows).to.equal(1);
+    });
+  });
 });

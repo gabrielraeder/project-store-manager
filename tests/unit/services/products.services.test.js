@@ -65,5 +65,37 @@ describe(' SERVICE - PRODUCTS', function () {
       const result = await productService.insert(data);
       expect(result).to.deep.equal(error);
     });
-  })
+  });
+
+  describe('Rota PUT', function () {
+    beforeEach(sinon.restore);
+    it('Testa atualizar um produto com sucesso', async function () {
+      const obj = { id: 1, name: 'batman' };
+      sinon.stub(productModel, 'update').resolves({ affectedRows: 1 });
+
+      const result = await productService.update(obj.id, obj.name);
+        
+      expect(result.type).to.equal(null);
+      expect(result.message).to.deep.equal(obj);
+    });
+
+    it('Testa atualizar um produto com nome inválido', async function () {
+      const obj = { id: 1, name: 'bat' };
+
+      const result = await productService.update(obj.id, obj.name);
+        
+      expect(result.type).to.equal('INVALID_VALUE');
+      expect(result.message).to.deep.equal('"name" length must be at least 5 characters long');
+    });
+
+    it('Testa atualizar um produto com ID inválido', async function () {
+      const obj = { id: 555, name: 'batman' };
+      sinon.stub(productModel, 'update').resolves({ affectedRows: 0 });
+
+      const result = await productService.update(obj.id, obj.name);
+        
+      expect(result.type).to.equal('PRODUCT_NOT_FOUND');
+      expect(result.message).to.deep.equal('Product not found');
+    });
+  });
 });
