@@ -24,8 +24,17 @@ const insert = async (data) => {
   return { type: null, message: product };
 };
 
+const update = async (id, name) => {
+  const error = validations.validateInsertData({ name });
+  if (error.type) return error;
+  const { affectedRows } = await productModel.update(+id, name);
+  if (affectedRows === 0) return { type: 'PRODUCT_NOT_FOUND', message: 'Product not found' };
+  return { type: null, message: { id, name } };
+};
+
 module.exports = {
   findAll,
   findById,
   insert,
+  update,
 };

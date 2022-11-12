@@ -34,8 +34,17 @@ const insert = async (data) => {
   return insertId;
 };
 
+const update = async (id, name) => {
+  const [result] = await conn.execute(
+    'UPDATE StoreManager.products SET name = ? WHERE id = ?',
+    [name, id],
+  );
+  return result;
+};
+
 module.exports = {
   findAll,
   findById,
   insert,
+  update,
 };
