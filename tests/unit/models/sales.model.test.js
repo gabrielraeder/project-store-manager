@@ -54,4 +54,14 @@ describe(' MODEL - SALES', function () {
       expect(result.affectedRows).to.equal(1);
     });
   });
+
+  describe('Rota PUT', function () {
+    beforeEach(sinon.restore);
+    it('Testa atualizar um produto com sucesso', async function () {
+      sinon.stub(connection, 'execute').resolves([{ affectedRows: 1 }]);
+
+      const result = await salesModel.update(1, 1, 55);
+      expect(result.affectedRows).to.equal(1);
+    });
+  });
 });

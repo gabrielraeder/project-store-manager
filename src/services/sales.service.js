@@ -2,8 +2,8 @@ const salesModel = require('../models/sales.model');
 const validations = require('./validations/inputValidations');
 
 const insert = async (array) => {
-  const error = await validations.checkQuantities(array);
-  if (error) return error;
+  const quantityError = await validations.checkQuantities(array);
+  if (quantityError) return quantityError;
   const idNotFound = await validations.checkIds(array);
   if (idNotFound) return idNotFound; 
   const saleId = await salesModel.insertSale();
@@ -37,8 +37,8 @@ const remove = async (id) => {
 const update = async (id, array) => {
   const findSaleById = await findById(+id);
   if (findSaleById.type) return findSaleById;
-  const error = await validations.checkQuantities(array);
-  if (error) return error;
+  const quantityError = await validations.checkQuantities(array);
+  if (quantityError) return quantityError;
   const idNotFound = await validations.checkIds(array);
   if (idNotFound) return idNotFound; 
   const res = array.map((sale) => salesModel.update(+id, sale.productId, sale.quantity));

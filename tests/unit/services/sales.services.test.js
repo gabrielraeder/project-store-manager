@@ -84,4 +84,37 @@ describe('SERVICE - SALES', function () {
       expect(result.message).to.deep.equal('Sale not found');
     });
   });
+
+  describe('Rota PUT', function () {
+    beforeEach(sinon.restore);
+    it('Testa atualizar um produto com sucesso', async function () {
+      sinon.stub(salesModel, 'update').resolves({ affectedRows: 1 });
+      sinon.stub(salesModel, 'findById').resolves(true);
+
+      const result = await salesService.update(1, salesMock.saleToUpdate);
+      expect(result).to.deep.equal({ type: null, message: { saleId: 1, itemsUpdated: salesMock.saleToUpdate } });
+    });
+
+    it('Erro ao atualizar um produto saleId inexistente', async function () {
+      sinon.stub(salesModel, 'findById').resolves();
+
+      const result = await salesService.update(555, salesMock.saleToUpdate);
+      expect(result).to.deep.equal({ type: 'SALE_NOT_FOUND', message: 'Sale not found' });
+    });
+
+    it('Erro ao atualizar um produto com quantidade "0"', async function () {
+      sinon.stub(salesModel, 'findById').resolves(true);
+
+      const result = await salesService.update(555, salesMock.saleQuantityZero);
+      expect(result).to.deep.equal({ type: 'INVALID_VALUE', message: '"quantity" must be greater than or equal to 1' });
+    });
+
+    it('Erro ao atualizar um produto com productId inválido', async function () {
+      sinon.stub(salesModel, 'findById').resolves(true);
+      sinon.stub(productsModel, 'findById').resolves(false);
+
+      const result = await salesService.update(555, salesMock.saleToUpdate);
+      expect(result).to.deep.equal({ type: 'ID_NOT_FOUND', message: 'Product not found' });
+    });
+  });
 });

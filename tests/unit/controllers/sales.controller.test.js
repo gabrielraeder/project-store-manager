@@ -168,4 +168,68 @@ describe('CONTROLLER - SALES', function () {
       expect(res.json).to.have.been.calledWith({ message: 'Sale not found' });
     });
   });
+
+  describe('Rota PUT', function () {
+    beforeEach(sinon.restore);
+    it('Testa atualizar um produto com sucesso', async function () {
+      const res = {};
+      const req = {
+        params: {
+          id: 1,
+        },
+        body: salesMock.saleToUpdate,
+      };
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      sinon.stub(salesService, 'update').resolves(salesMock.successUpdate);
+
+      await salesController.update(req, res);
+
+      expect(res.status).to.have.been.calledWith(200);
+      expect(res.json).to.have.been.calledWith(salesMock.successUpdate.message);
+    });
+
+    it('Erro ao atualizar um produto com valores inválidos', async function () {
+      const res = {};
+      const req = {
+        params: {
+          id: 1,
+        },
+        body: salesMock.wrongQuantity,
+      };
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      sinon.stub(salesService, 'update').resolves(
+        { type: 'INVALID_VALUE', message: '"quantity" must be greater than or equal to 1' }
+      );
+
+      await salesController.update(req, res);
+
+      expect(res.status).to.have.been.calledWith(422);
+      expect(res.json).to.have.been.calledWith({ message: '"quantity" must be greater than or equal to 1' });
+    });
+
+    it('Erro ao atualizar um produto com quantidade "0"', async function () {
+      const res = {};
+      const req = {
+        params: {
+          id: 1,
+        },
+        body: salesMock.wrongProductId,
+      };
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      sinon.stub(salesService, 'update').resolves(
+        { type: 'ID_NOT_FOUND', message: 'Product not found' }
+      );
+
+      await salesController.update(req, res);
+
+      expect(res.status).to.have.been.calledWith(404);
+      expect(res.json).to.have.been.calledWith({ message: 'Product not found' });
+    });
+  });
 });

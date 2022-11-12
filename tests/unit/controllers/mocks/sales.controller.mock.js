@@ -90,6 +90,19 @@ const saleByIdDB = [
   }
 ];
 
+const saleToUpdate = [
+  {
+    "productId": 1,
+    "quantity": 55
+  },
+  {
+    "productId": 2,
+    "quantity": 50
+  }
+];
+
+const successUpdate = { type: null, message: {saleId: 1, itemsUpdated: saleToUpdate} }
+
 module.exports = {
   newSale,
   newSaleDBReturn,
@@ -99,4 +112,6 @@ module.exports = {
   wrongProductId,
   saleByIdDB,
   allSalesDB,
+  saleToUpdate,
+  successUpdate,
 }
