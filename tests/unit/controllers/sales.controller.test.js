@@ -129,4 +129,43 @@ describe('CONTROLLER - SALES', function () {
       expect(res.json).to.have.been.calledWith({ message: 'Sale not found' });
     });
   });
+
+  describe('Rota DELETE', function () {
+    beforeEach(sinon.restore);
+    it('Testa remover um produto com sucesso', async function () {
+      const res = {};
+      const req = {
+        params: {
+          id: 1,
+        }
+      };
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      sinon.stub(salesService, 'remove').resolves({ type: null, message: { id: 1 } });
+      await salesController.remove(req, res);
+
+      expect(res.status).to.have.been.calledWith(204);
+      expect(res.json).to.have.been.calledWith();
+    });
+
+    it('Falha ao remover um produto', async function () {
+      const res = {};
+      const req = {
+        params: {
+          id: 555,
+        }
+      };
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      sinon.stub(salesService, 'remove').resolves(
+        { type: 'SALE_NOT_FOUND', message: 'Sale not found' }
+      );
+      await salesController.remove(req, res);
+
+      expect(res.status).to.have.been.calledWith(404);
+      expect(res.json).to.have.been.calledWith({ message: 'Sale not found' });
+    });
+  });
 });

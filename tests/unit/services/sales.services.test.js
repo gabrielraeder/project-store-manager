@@ -63,4 +63,25 @@ describe('SERVICE - SALES', function () {
       expect(result.message).to.deep.equal('Sale not found');
     });
   });
+
+  describe('Rota DELETE', function () {
+    beforeEach(sinon.restore);
+    it('Testa remover um produto com sucesso', async function () {
+      sinon.stub(salesModel, 'remove').resolves({ affectedRows: 1 });
+
+      const result = await salesService.remove(1);
+
+      expect(result.type).to.equal(null);
+      expect(result.message).to.deep.equal({ id: 1 });
+    });
+
+    it('Falha ao remover um produto', async function () {
+      sinon.stub(salesModel, 'remove').resolves({ affectedRows: 0 });
+
+      const result = await salesService.remove(555);
+
+      expect(result.type).to.equal('SALE_NOT_FOUND');
+      expect(result.message).to.deep.equal('Sale not found');
+    });
+  });
 });

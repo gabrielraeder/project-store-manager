@@ -44,4 +44,14 @@ describe(' MODEL - SALES', function () {
       expect(result).to.deep.equal(salesMock.saleByIdDB);
     });
   });
+
+  describe('Rota DELETE', function () {
+    beforeEach(sinon.restore);
+    it('Testa remover um produto com sucesso', async function () {
+      sinon.stub(connection, 'execute').resolves([{ affectedRows: 1 }]);
+
+      const result = await salesModel.remove(1);
+      expect(result.affectedRows).to.equal(1);
+    });
+  });
 });

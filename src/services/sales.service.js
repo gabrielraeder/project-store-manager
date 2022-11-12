@@ -39,8 +39,15 @@ const findById = async (id) => {
   return { type: null, message: sales };
 };
 
+const remove = async (id) => {
+  const { affectedRows } = await salesModel.remove(+id);
+  if (affectedRows === 0) return { type: 'SALE_NOT_FOUND', message: 'Sale not found' };
+  return { type: null, message: { id } };
+};
+
 module.exports = {
   insert,
   findAll,
   findById,
+  remove,
 };
