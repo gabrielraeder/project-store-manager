@@ -31,6 +31,7 @@ const update = async (req, res) => {
   const { id } = req.params;
   const array = req.body;
   const { type, message } = await salesService.update(+id, array);
+  if (type && type === 'INVALID_VALUE') return res.status(422).json({ message });
   if (type) return res.status(404).json({ message });
   return res.status(200).json(message);
 };

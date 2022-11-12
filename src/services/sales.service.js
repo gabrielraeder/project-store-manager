@@ -1,26 +1,7 @@
 const salesModel = require('../models/sales.model');
 const validations = require('./validations/inputValidations');
 
-// const checkIds = async (array) => {
-//   const productsIds = array.map((sale) => sale.productId);
-//   const isProducts = await Promise.all(productsIds.map(
-//     async (p) => validations.validateProductIdExistence(+p),
-//   ));
-//   const idNotFound = isProducts.find((i) => i.type === 'ID_NOT_FOUND');
-//   return idNotFound;
-// };
-
-// const checkQuantities = async (array) => {
-//   const quantities = array.map((sale) => sale.quantity);
-//   const validation = quantities.map((q) => validations.validateSalesQuantity(q));
-//   const error = validation.find((i) => i.type === 'INVALID_VALUE');
-//   return error;
-// };
-
 const insert = async (array) => {
-  // const quantities = array.map((sale) => sale.quantity);
-  // const validation = quantities.map((q) => validations.validateSalesQuantity(q));
-  // const error = validation.find((i) => i.type === 'INVALID_VALUE');
   const error = await validations.checkQuantities(array);
   if (error) return error;
   const idNotFound = await validations.checkIds(array);
@@ -56,12 +37,16 @@ const remove = async (id) => {
 const update = async (id, array) => {
   const findSaleById = await findById(+id);
   if (findSaleById.type) return findSaleById;
+  const error = await validations.checkQuantities(array);
+  if (error) return error;
+  const idNotFound = await validations.checkIds(array);
+  if (idNotFound) return idNotFound; 
   const res = array.map((sale) => salesModel.update(+id, sale.productId, sale.quantity));
   await Promise.all(res);
 
   const result = {
     saleId: id,
-    itemsSold: array,
+    itemsUpdated: array,
   };
   return { type: null, message: result };
 };
