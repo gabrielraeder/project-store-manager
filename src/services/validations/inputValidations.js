@@ -32,9 +32,27 @@ const validateProductIdExistence = async (id) => {
   return { type: null, message: '' };
 };
 
+const checkIds = async (array) => {
+  const productsIds = array.map((sale) => sale.productId);
+  const isProducts = await Promise.all(productsIds.map(
+    async (p) => validateProductIdExistence(+p),
+  ));
+  const idNotFound = isProducts.find((i) => i.type === 'ID_NOT_FOUND');
+  return idNotFound;
+};
+
+const checkQuantities = async (array) => {
+  const quantities = array.map((sale) => sale.quantity);
+  const validation = quantities.map((q) => validateSalesQuantity(q));
+  const error = validation.find((i) => i.type === 'INVALID_VALUE');
+  return error;
+};
+
 module.exports = {
   validateId,
   validateInsertData,
   validateSalesQuantity,
   validateProductIdExistence,
+  checkIds,
+  checkQuantities,
 };

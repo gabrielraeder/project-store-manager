@@ -27,9 +27,18 @@ const remove = async (req, res) => {
   return res.status(204).json();
 };
 
+const update = async (req, res) => {
+  const { id } = req.params;
+  const array = req.body;
+  const { type, message } = await salesService.update(+id, array);
+  if (type) return res.status(404).json({ message });
+  return res.status(200).json(message);
+};
+
 module.exports = {
   createSales,
   findAll,
   findById,
   remove,
+  update,
 };
