@@ -5,5 +5,7 @@ const validateNewSale = require('../middlewares/validateNewSale.middleware');
 const router = express.Router();
 
 router.post('/', validateNewSale, salesController.createSales);
+router.get('/', salesController.findAll);
+router.get('/:id', salesController.findById);
 
 module.exports = router;

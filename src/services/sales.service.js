@@ -28,6 +28,19 @@ const insert = async (array) => {
   return { type: null, message: result };
 };
 
+const findAll = async () => {
+  const sales = await salesModel.findAll();
+  return { type: null, message: sales };
+};
+
+const findById = async (id) => {
+  const sales = await salesModel.findById(+id);
+  if (!sales || sales.length === 0) return { type: 'SALE_NOT_FOUND', message: 'Sale not found' };
+  return { type: null, message: sales };
+};
+
 module.exports = {
   insert,
+  findAll,
+  findById,
 };
