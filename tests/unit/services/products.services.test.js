@@ -98,4 +98,25 @@ describe(' SERVICE - PRODUCTS', function () {
       expect(result.message).to.deep.equal('Product not found');
     });
   });
+
+  describe('Rota DELETE', function () {
+    beforeEach(sinon.restore);
+    it('Testa remover um produto com sucesso', async function () {
+      sinon.stub(productModel, 'remove').resolves({ affectedRows: 1 });
+
+      const result = await productService.remove(1);
+
+      expect(result.type).to.equal(null);
+      expect(result.message).to.deep.equal({ id: 1 });
+    });
+
+    it('Falha ao remover um produto', async function () {
+      sinon.stub(productModel, 'remove').resolves({ affectedRows: 0 });
+
+      const result = await productService.remove(555);
+
+      expect(result.type).to.equal('PRODUCT_NOT_FOUND');
+      expect(result.message).to.deep.equal('Product not found');
+    });
+  });
 });

@@ -53,4 +53,14 @@ describe('MODEL - PRODUCTS', function () {
       expect(result.affectedRows).to.equal(1);
     });
   });
+
+  describe('Rota DELETE', function () {
+    beforeEach(sinon.restore);
+    it('Testa remover um produto com sucesso', async function () {
+      sinon.stub(connection, 'execute').resolves([{ affectedRows: 1 }]);
+
+      const result = await productModel.remove(1);
+      expect(result.affectedRows).to.equal(1);
+    });
+  });
 });

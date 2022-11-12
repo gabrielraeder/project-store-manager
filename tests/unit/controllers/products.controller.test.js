@@ -177,4 +177,43 @@ describe('CONTROLLER - PRODUCTS', function () {
       expect(res.json).to.have.been.calledWith({ message: '"name" length must be at least 5 characters long' });
     });
   });
+
+  describe('Rota DELETE', function () {
+    beforeEach(sinon.restore);
+    it('Testa remover um produto com sucesso', async function () {
+      const res = {};
+      const req = {
+        params: {
+          id: 1,
+        }
+      };
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      sinon.stub(productService, 'remove').resolves({ type: null, message: { id: 1 } });
+      await productController.remove(req, res);
+
+      expect(res.status).to.have.been.calledWith(204);
+      expect(res.json).to.have.been.calledWith();
+    });
+
+    it('Falha ao remover um produto', async function () {
+      const res = {};
+      const req = {
+        params: {
+          id: 555,
+        }
+      };
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      sinon.stub(productService, 'remove').resolves(
+        { type: 'PRODUCT_NOT_FOUND', message: 'Product not found' }
+      );
+      await productController.remove(req, res);
+
+      expect(res.status).to.have.been.calledWith(404);
+      expect(res.json).to.have.been.calledWith({ message: 'Product not found' });
+    });
+  });
 });
