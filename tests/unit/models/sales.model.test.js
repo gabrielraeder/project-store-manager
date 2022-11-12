@@ -6,7 +6,7 @@ const salesModel = require('../../../src/models/sales.model');
 
 const salesMock = require('./mocks/sales.mock')
 
-describe('Testa camada MODEL de rotas SALES', function () {
+describe(' MODEL - SALES', function () {
   describe('Rota POST', function () {
     beforeEach(sinon.restore);
     it('Testa adicionar nova venda em sales', async function () {
@@ -24,5 +24,24 @@ describe('Testa camada MODEL de rotas SALES', function () {
 
       expect(result).to.equal(3);
     });
-  })
+  });
+
+  describe('Rotas GET', function () {
+    beforeEach(sinon.restore);
+    it('Testa buscar todas as vendas', async function () {
+      sinon.stub(connection, 'execute').resolves([salesMock.allSalesDB]);
+
+      const result = await salesModel.findAll();
+
+      expect(result).to.deep.equal(salesMock.allSalesDB);
+    });
+
+    it('Testa buscar uma venda por id, com sucesso', async function () {
+      sinon.stub(connection, 'execute').resolves([salesMock.saleByIdDB]);
+
+      const result = await salesModel.findById(1);
+
+      expect(result).to.deep.equal(salesMock.saleByIdDB);
+    });
+  });
 });

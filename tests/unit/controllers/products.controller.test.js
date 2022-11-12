@@ -10,7 +10,7 @@ const productService = require('../../../src/services/products.service');
 
 const productsMock = require('./mocks/products.mock');
 
-describe('Testa camada CONTROLLER de rotas products', function () {
+describe('CONTROLLER - PRODUCTS', function () {
   describe('rotas GET', function () {
     beforeEach(sinon.restore);
     it('teste buscar todos produtos', async function () {

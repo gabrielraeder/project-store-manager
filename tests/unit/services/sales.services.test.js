@@ -7,7 +7,7 @@ const salesService = require('../../../src/services/sales.service');
 
 const salesMock = require('./mocks/sales.service.mock');
 
-describe('Testa camada SERVICE de rotas SALES', function () {
+describe('SERVICE - SALES', function () {
   describe('Rota POST', function () {
     beforeEach(sinon.restore);
     it('Testa adicionar nova venda em product_sales', async function () {
@@ -34,6 +34,33 @@ describe('Testa camada SERVICE de rotas SALES', function () {
 
       expect(result.type).to.equal('INVALID_VALUE');
       expect(result.message).to.deep.equal('"quantity" must be greater than or equal to 1');
+    });
+  });
+
+  describe('Rotas GET', function () {
+    beforeEach(sinon.restore);
+    it('Testa buscar todas as vendas', async function () {
+      sinon.stub(salesModel, 'findAll').resolves(salesMock.allSalesDB);
+
+      const result = await salesService.findAll();
+      expect(result.type).to.equal(null);
+      expect(result.message).to.deep.equal(salesMock.allSalesDB);
+    });
+
+    it('Testa buscar uma venda por id, com sucesso', async function () {
+      sinon.stub(salesModel, 'findById').resolves(salesMock.saleByIdDB);
+
+      const result = await salesService.findById(1);
+      expect(result.type).to.equal(null);
+      expect(result.message).to.deep.equal(salesMock.saleByIdDB);
+    });
+
+    it('Testa buscar uma venda por id, com falha', async function () {
+      sinon.stub(salesModel, 'findById').resolves([]);
+
+      const result = await salesService.findById(555);
+      expect(result.type).to.equal('SALE_NOT_FOUND');
+      expect(result.message).to.deep.equal('Sale not found');
     });
   });
 });

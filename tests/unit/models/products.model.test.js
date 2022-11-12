@@ -6,7 +6,7 @@ const productModel = require('../../../src/models/products.model');
 
 const productMocks = require('./mocks/products.mock');
 
-describe('Testa camada Model de rotas products', function () {
+describe('MODEL - PRODUCTS', function () {
   describe('rotas GET', function () {
     beforeEach(sinon.restore);
     it('teste buscar todos produtos', async function () {

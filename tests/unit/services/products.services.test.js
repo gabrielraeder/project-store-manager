@@ -6,7 +6,7 @@ const productService = require('../../../src/services/products.service');
 
 const productMocks = require('./mocks/products.mock');
 
-describe('Testa camada SERVICE de rotas products', function () {
+describe(' SERVICE - PRODUCTS', function () {
   beforeEach(sinon.restore);
   describe('rotas GET', function () {
     beforeEach(sinon.restore);
